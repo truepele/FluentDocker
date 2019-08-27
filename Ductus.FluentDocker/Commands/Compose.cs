@@ -351,9 +351,14 @@ namespace Ductus.FluentDocker.Commands
       bool buildBeforeCreate = false, TimeSpan? timeout = null,
       bool removeOphans = false,
       bool useColor = false,
+      bool noStart = false,
       string[] services = null /*all*/,
-      ICertificatePaths certificates = null, params string[] composeFile)
+      ICertificatePaths certificates = null,
+      params string[] composeFile)
     {
+      if(forceRecreate && noRecreate) 
+        throw new InvalidOperationException($"{nameof(forceRecreate)} and {nameof(noRecreate)} are incompatible.");
+      
       var cwd = WorkingDirectory(composeFile);
 
       var args = $"{host.RenderBaseArgs(certificates)}";
@@ -366,7 +371,7 @@ namespace Ductus.FluentDocker.Commands
       if (!string.IsNullOrEmpty(altProjectName)) args += $" -p {altProjectName}";
 
       // Always run in detached mode
-      var options = "--detach";
+      var options = noStart? "--no-start": "--detach";
 
       if (forceRecreate) options += " --force-recreate";
 
@@ -375,12 +380,12 @@ namespace Ductus.FluentDocker.Commands
       if (dontBuild) options += " --no-build";
 
       if (buildBeforeCreate) options += " --build";
-
-      if (!useColor) options += " --no-color";
-
-      if (null != timeout) options += $" -t {Math.Round(timeout.Value.TotalSeconds, 0)}";
-
+      
       if (removeOphans) options += " --remove-orphans";
+      
+      if (!useColor) options += " --no-color";
+      
+      if (null != timeout) options += $" -t {Math.Round(timeout.Value.TotalSeconds, 0)}";
 
       if (null != services && 0 != services.Length) options += " " + string.Join(" ", services);
 

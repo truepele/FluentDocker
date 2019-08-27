@@ -50,8 +50,10 @@ namespace Ductus.FluentDocker.Commands
           bool.TryParse(items[5], out intern);
         if (items.Length > 6)
         {
-          DateTime.TryParse(items[6].Substring(0, items[6].IndexOf('+')), out created);
-          created = DateTime.SpecifyKind(created, DateTimeKind.Utc);
+          var createdSplitted = items[6].Split(' ');
+          var dateTimeStr = string.Join(" ", createdSplitted.Take(3));
+          DateTime.TryParse(dateTimeStr, out created);
+          created = DateTime.SpecifyKind(created.ToUniversalTime(), DateTimeKind.Utc);
         }
 
         list.Add(new NetworkRow
