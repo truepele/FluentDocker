@@ -18,7 +18,7 @@
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <AssemblyVersion>2.7.1.0</AssemblyVersion>
     <FileVersion>2.7.1.0</FileVersion>
-    <Version>2.7.1</Version>
+    <Version>2.7.1-fork</Version>
     <AssemblyOriginatorKeyFile>..\keypair.snk</AssemblyOriginatorKeyFile>
     <SignAssembly>true</SignAssembly>
     <PublicSign Condition=" '$(OS)' != 'Windows_NT' ">true</PublicSign>
